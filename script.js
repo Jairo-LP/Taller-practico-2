@@ -153,12 +153,12 @@ function ordenarProductos() {
     return; // No ordenar
   }
 
-  var productos = listaProductos.getElementsByClassName("producto");
+  var productosDom = listaProductos.getElementsByClassName("producto");
   var arrayProductos = [];
 
   // Copia de un array
-  for (var i = 0; i < productos.length; i++) {
-    arrayProductos.push(productos[i]);
+  for (var i = 0; i < productosDom.length; i++) {
+    arrayProductos.push(productosDom[i]);
   }
 
   // Ordenar
@@ -282,7 +282,7 @@ function mostrarCarrito() {
   // Agregar cada producto selecionado 
   for (var i = 0; i < carrito.length; i++) {
     var item = carrito[i];
-    var subtotal = item.precio * item.cantidad;
+    var subtotalItem = item.precio * item.cantidad;
 
     var div = document.createElement("div");
     div.className = "carrito-item";
@@ -290,7 +290,7 @@ function mostrarCarrito() {
       '<img src="' + item.imagen + '" alt="' + item.nombre + '">' +
       '<div class="carrito-item-info">' +
         '<div class="carrito-item-nombre">' + item.nombre + '</div>' +
-        '<div class="carrito-item-precio">$' + subtotal.toFixed(2) + '</div>' +
+        '<div class="carrito-item-precio">$' + subtotalItem.toFixed(2) + '</div>' +
         '<div class="carrito-item-cantidad">' +
           '<button onclick="restarCantidad(' + i + ')">-</button>' +
           '<span>' + item.cantidad + '</span>' +
@@ -310,11 +310,13 @@ function mostrarCarrito() {
     subtotal = subtotal + (carrito[i].precio * carrito[i].cantidad);
   }
 
-  var impuesto = subtotal * 0.15;
-  var total = subtotal + iva;
+  // CORREGIDO: antes decia "* 0.15" y usaba una variable "iva" que nunca
+  // se habia declarado, lo que rompia toda la funcion con un ReferenceError.
+  var impuesto = subtotal * 0.12;
+  var total = subtotal + impuesto;
 
   textoSubtotal.textContent = "$" + subtotal.toFixed(2);
-  textoImpuesto.textContent = "$" + iva.toFixed(2);
+  textoImpuesto.textContent = "$" + impuesto.toFixed(2);
   textoTotal.textContent = "$" + total.toFixed(2);
 }
 
